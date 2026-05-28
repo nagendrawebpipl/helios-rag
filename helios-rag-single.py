@@ -1290,7 +1290,11 @@ def main():
 
     results = []
     for item in tests:
-        q = item["input"].get("question", item["input"].get("query",""))
+        inp = item["input"]
+        if isinstance(inp, str):
+            q = inp
+        else:
+            q = inp.get("question", inp.get("query", str(inp)))
         hits = retrieve(q, faqs, vecs, idf)
         ans, sources = generate(q, hits)
         results.append({"id": item["id"], "output": {"answer": ans, "sources": sources}})
